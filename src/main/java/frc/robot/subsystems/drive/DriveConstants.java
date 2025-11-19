@@ -21,6 +21,12 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
+
+  public static final double alignMaxSpeed = 3;
+  public static final double alignMaxAngularSpeed = 2.5 * Math.PI;
+  public static final double alignRotationTolerance = Units.degreesToRadians(3); // radians
+  public static final double alignPositionTolerance = 0.03; // meters
+
   public static final double maxSpeedMetersPerSec = 4.8; // max 4.8
   public static final double odometryFrequency = 100.0; // Hz
   public static final double trackWidth = Units.inchesToMeters(26.5);
@@ -69,6 +75,7 @@ public class DriveConstants {
 
   // Drive PID configuration
   public static final double driveKp = 0.0;
+  public static final double driveKi = 0.0;
   public static final double driveKd = 0.0;
   public static final double driveKs = 0.0;
   public static final double driveKv = 0.1;
@@ -90,6 +97,7 @@ public class DriveConstants {
 
   // Turn PID configuration
   public static final double turnKp = 2.0;
+  public static final double turnKi = 0.0;
   public static final double turnKd = 0.0;
   public static final double turnSimP = 8.0;
   public static final double turnSimD = 0.0;

@@ -185,6 +185,8 @@ public class RobotContainer {
                   drive.run(0.0, aimController.calculate(vision.getTargetX(0).getRadians()));
                 },
                 drive));
+
+    controller.rightTrigger().whileTrue(drive.alignToCenterReef());
   }
 
   /**

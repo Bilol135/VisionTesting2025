@@ -13,7 +13,8 @@
 
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Volts;
+// import static frc.robot.Constants.useVision;
 import static frc.robot.subsystems.drive.DriveConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -28,6 +29,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -44,6 +46,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.FieldConstants;
+// import frc.robot.FieldConstants;
+import frc.robot.commands.AlignToPose;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -123,6 +129,36 @@ public class Drive extends SubsystemBase {
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
 
     setXModules();
+  }
+  /**
+   * A command that automatically aligns to the closest reef center position
+   *
+   * @return
+   */
+  public Command alignToCenterReef() {
+    return new AlignToPose(
+        this,
+        () -> {
+          Pose2d[] reefPoses = FieldConstants.ReefCenterPositions;
+          Pose2d currentPose = getPose();
+
+          int closestPose = 0;
+          double closestDistance = Double.MAX_VALUE;
+
+          // Calculate distance to each reef pose and select closest one
+          for (int i = 0; i < 6; i++) {
+            Transform2d currentToTarget = AllianceFlipUtil.apply(reefPoses[i]).minus(currentPose);
+            double distance = currentToTarget.getTranslation().getNorm();
+
+            if (distance < closestDistance) {
+              closestPose = i;
+              closestDistance = distance;
+            }
+          }
+
+          return AllianceFlipUtil.apply(FieldConstants.ReefCenterPositions[closestPose]);
+        },
+        false);
   }
 
   @Override
