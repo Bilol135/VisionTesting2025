@@ -56,7 +56,7 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> autoChooser;
 
   private static final PathConstraints reefPathfindConstraints =
-      new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+      new PathConstraints(4, 4, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -193,8 +193,8 @@ public class RobotContainer {
                 .ignoringDisable(true));
                 */
     // Pathfind to the closest reef scoring pose
-    controller.a().onTrue(pathfindToClosestReef(true));
-    controller.b().onTrue(pathfindToClosestReef(false));
+    //controller.a().onTrue(pathfindToClosestReef(true));
+    //controller.b().onTrue(pathfindToClosestReef(false));
     // Auto aim command example
     @SuppressWarnings("resource")
     PIDController aimController = new PIDController(0.2, 0.0, 0.0);
@@ -211,7 +211,7 @@ public class RobotContainer {
                 },
                 drive));
 
-    controller.rightTrigger().whileTrue(drive.alignToCenterReef());
+    //controller.rightTrigger().whileTrue(drive.alignToCenterReef());
   }
 
   /**
